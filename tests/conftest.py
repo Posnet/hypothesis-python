@@ -18,10 +18,9 @@
 from __future__ import division, print_function, absolute_import
 
 import gc
+import time as time_module
 
 import pytest
-
-import time as time_module
 
 from tests.common.setup import run
 
@@ -40,4 +39,9 @@ def consistently_increment_time(monkeypatch):
     def time():
         current_time[0] += 0.0001
         return current_time[0]
+
+    def sleep(naptime):
+        current_time[0] += naptime
+
     monkeypatch.setattr(time_module, 'time', time)
+    monkeypatch.setattr(time_module, 'sleep', sleep)
