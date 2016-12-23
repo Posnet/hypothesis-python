@@ -17,27 +17,12 @@
 
 from __future__ import division, print_function, absolute_import
 
-import gc
-
-import pytest
-
-import time as time_module
-
-from tests.common.setup import run
-
-run()
+import time
 
 
-@pytest.fixture(scope=u'function', autouse=True)
-def gc_before_each_test():
-    gc.collect()
-
-
-@pytest.fixture(scope=u'function', autouse=True)
-def consistently_increment_time(monkeypatch):
-    current_time = [time_module.time()]
-
-    def time():
-        current_time[0] += 0.0001
-        return current_time[0]
-    monkeypatch.setattr(time_module, 'time', time)
+def test_time_consistently_increments_in_tests():
+    x = time.time()
+    y = time.time()
+    z = time.time()
+    assert y == x + 0.0001
+    assert z == y + 0.0001
